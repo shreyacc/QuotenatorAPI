@@ -1,0 +1,32 @@
+name: Keep Quotentator API Warm (Multi-Endpoint)
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # Every 15 minutes
+  workflow_dispatch:        # Allow manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /ping endpoint
+        run: |
+          echo "Pinging /ping endpoint..."
+          RESPONSE=$(curl -s -w "HTTP Status: %{http_code}, Time: %{time_total}s\n" -o /dev/null https://quotenatorapi.onrender.com/ping)
+          echo "$RESPONSE"
+          STATUS_CODE=$(echo $RESPONSE | grep -oE '[0-9]{3}')
+          if [ "$STATUS_CODE" != "200" ]; then
+            echo "/ping failed with status $STATUS_CODE"
+            exit 1
+          fi
+
+      - name: Ping /getQuote endpoint
+        run: |
+          echo "Pinging /getQuote endpoint..."
+          RESPONSE=$(curl -s -w "HTTP Status: %{http_code}, Time: %{time_total}s\n" -o /dev/null https://quotenatorapi.onrender.com/randomQuote)
+          echo "$RESPONSE"
+          STATUS_CODE=$(echo $RESPONSE | grep -oE '[0-9]{3}')
+          if [ "$STATUS_CODE" != "200" ]; then
+            echo "/getQuote failed with status $STATUS_CODE"
+            exit 1
+          fi

@@ -12,8 +12,8 @@ jobs:
       - name: Ping /randomQuote endpoint
         run: |
           echo "Pinging /randomQuote endpoint..."
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://yourquotenator.onrender.com/randomQuote)
-          TIME_TOTAL=$(curl -s -o /dev/null -w "%{time_total}" https://yourquotenator.onrender.com/randomQuote)
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" https://quotenatorapi.onrender.com/randomQuote)
+          TIME_TOTAL=$(curl -s -o /dev/null -w "%{time_total}" https://quotenatorapi.onrender.com/randomQuote)
           echo "HTTP Status: $STATUS_CODE, Time: ${TIME_TOTAL}s"
 
           if [ "$STATUS_CODE" != "200" ]; then
